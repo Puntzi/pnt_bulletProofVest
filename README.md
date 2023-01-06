@@ -15,6 +15,9 @@
 * ox_lib
 
 
+**If u want to change names or anything like that you need to know a little codding to be able to edit the code (it's not hard to do it)**
+
+
 ***Remember to add this to your ox_inventory data/items***
 
 ```
@@ -26,6 +29,28 @@
 			anim = { dict = 'clothingshirt', clip = 'try_shirt_positive_d' },
             usetime = 3500,
 			export = 'pnt_bulletProofVest.bulletproofvest',
+		},
+	},
+
+	['mediumbulletproofvest'] = {
+		label = 'Medium Bulletproof Vest',
+		weight = 3000,
+		stack = false,
+		client = {
+			anim = { dict = 'clothingshirt', clip = 'try_shirt_positive_d' },
+            usetime = 3500,
+			export = 'pnt_bulletProofVest.mediumbulletproofvest',
+		},
+	},
+
+	['lowbulletproofvest'] = {
+		label = 'Low Bulletproof Vest',
+		weight = 3000,
+		stack = false,
+		client = {
+			anim = { dict = 'clothingshirt', clip = 'try_shirt_positive_d' },
+            usetime = 3500,
+			export = 'pnt_bulletProofVest.lowbulletproofvest',
 		},
 	},
 ```
