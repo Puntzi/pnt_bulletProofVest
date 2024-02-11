@@ -2,7 +2,6 @@ Config = {}
 
 Config.CommandRemoveVest = 'removevest'
 
-
 Config.VestComponent = {
     bulletproofvest = {
         armourQuantity = 100, -- How much armor u want to add this item

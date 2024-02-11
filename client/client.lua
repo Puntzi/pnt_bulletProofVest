@@ -1,10 +1,11 @@
 local ox_inventory = exports.ox_inventory
-
+local armourType
 
 RegisterCommand(Config.CommandRemoveVest, function()
     local playerPed = cache.ped
     local armour = GetPedArmour(playerPed)
     if armour == 0 then 
+        SetPedComponentVariation(playerPed, 9, 0, 0, 0)
         return lib.notify({type = 'error', description = Strings['no_armour']})
     end
 
@@ -20,34 +21,62 @@ RegisterCommand(Config.CommandRemoveVest, function()
     }) then 
         SetPedArmour(playerPed, 0)
         SetPedComponentVariation(playerPed, 9, 0, 0, 0)
-        TriggerServerEvent('pnt_bulletProofVest:removeIt', armour)
+        TriggerServerEvent('pnt_bulletProofVest:removeIt', armour, armourType)
+    end
+end)
+
+local function setArmour(data, armour)
+    local playerPed = cache.ped
+    local sex, drawableId, textureId, armourQuantity
+
+    for bulletName, bulletData in pairs(Config.VestComponent) do 
+        if bulletName == data.name then
+            for k, v in pairs(bulletData) do
+                if IsPedModel(playerPed, 'mp_m_freemode_01') then
+                    if k == 'Male' then 
+                        sex = k
+                        drawableId = v.drawableId
+                        textureId = v.textureId
+                    end
+                else
+                    if k == 'Female' then 
+                        sex = k
+                        drawableId = v.drawableId
+                        textureId = v.textureId
+                    end
+                end
+                armourQuantity = bulletData.armourQuantity
+            end
+        end
     end
 
+    SetPedComponentVariation(playerPed, 9, drawableId, textureId, 0)
+
+    if not data.metadata.armour then 
+        SetPedArmour(playerPed, armourQuantity + armour)
+    else
+        SetPedArmour(playerPed, armour + data.metadata.armour)
+    end
+
+    armourType = data.name
+end
+
+RegisterCommand('giveArmour', function()
+    SetPedArmour(cache.ped, 50)
 end)
 
 
 exports('bulletproofvest', function(data, slot)
     local playerPed = cache.ped 
     local armour = GetPedArmour(playerPed)
-
     if armour ~= 100 then
         ox_inventory:useItem(data, function(data)
             if data then 
-                if IsPedModel(playerPed, 'mp_m_freemode_01') then
-                    SetPedComponentVariation(playerPed, 9, Config.VestComponent.bulletproofvest.Male.drawableId, Config.VestComponent.bulletproofvest.Male.textureId, 0)
-                else
-                    SetPedComponentVariation(playerPed, 9, Config.VestComponent.bulletproofvest.Female.drawableId, Config.VestComponent.bulletproofvest.Female.textureId, 0)
-                end
-                if not data.metadata.armour then 
-                    SetPedArmour(playerPed, Config.VestComponent.bulletproofvest.armourQuantity + armour)
-                else
-                    SetPedArmour(playerPed, armour + data.metadata.armour)
-                end
-                
+                setArmour(data, armour)
             end
         end)
     else
-        lib.notify({type = 'error', description = Strings['no_need_armour']})
+       lib.notify({type = 'error', description = Strings['no_need_armour']})
     end
 end)
 
@@ -59,17 +88,7 @@ exports('mediumbulletproofvest', function(data, slot)
     if armour ~= 100 then
         ox_inventory:useItem(data, function(data)
             if data then 
-                if IsPedModel(playerPed, 'mp_m_freemode_01') then
-                    SetPedComponentVariation(playerPed, 9, Config.VestComponent.mediumbulletproofvest.Male.drawableId, Config.VestComponent.mediumbulletproofvest.Male.textureId, 0)
-                else
-                    SetPedComponentVariation(playerPed, 9, Config.VestComponent.mediumbulletproofvest.Female.drawableId, Config.VestComponent.mediumbulletproofvest.Female.textureId, 0)
-                end
-                if not data.metadata.armour then 
-                    SetPedArmour(playerPed, Config.VestComponent.mediumbulletproofvest.armourQuantity + armour)
-                else
-                    SetPedArmour(playerPed, armour + data.metadata.armour)
-                end
-                
+                setArmour(data, armour)
             end
         end)
     else
@@ -85,17 +104,7 @@ exports('lowbulletproofvest', function(data, slot)
     if armour ~= 100 then
         ox_inventory:useItem(data, function(data)
             if data then 
-                if IsPedModel(playerPed, 'mp_m_freemode_01') then
-                    SetPedComponentVariation(playerPed, 9, Config.VestComponent.lowbulletproofvest.Male.drawableId, Config.VestComponent.lowbulletproofvest.Male.textureId, 0)
-                else
-                    SetPedComponentVariation(playerPed, 9, Config.VestComponent.lowbulletproofvest.Female.drawableId, Config.VestComponent.lowbulletproofvest.Female.textureId, 0)
-                end
-                if not data.metadata.armour then 
-                    SetPedArmour(playerPed, Config.VestComponent.lowbulletproofvest.armourQuantity + armour)
-                else
-                    SetPedArmour(playerPed, armour + data.metadata.armour)
-                end
-                
+                setArmour(data, armour)
             end
         end)
     else
