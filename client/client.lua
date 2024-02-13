@@ -61,11 +61,6 @@ local function setArmour(data, armour)
     armourType = data.name
 end
 
-RegisterCommand('giveArmour', function()
-    SetPedArmour(cache.ped, 50)
-end)
-
-
 exports('bulletproofvest', function(data, slot)
     local playerPed = cache.ped 
     local armour = GetPedArmour(playerPed)
