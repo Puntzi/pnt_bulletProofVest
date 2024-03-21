@@ -14,16 +14,16 @@ AddEventHandler('playerDropped', function()
     identifier = string.gsub(identifier, "license:", "")
     local armour = GetPedArmour(GetPlayerPed(source))
 
-    MySQL.query('SELECT * FROM bulletProof WHERE identifier = @identifier', {
+    MySQL.query('SELECT * FROM bulletproof WHERE identifier = @identifier', {
         ['@identifier'] = identifier
     }, function(result)
         if #result > 0 then
-            MySQL.update('UPDATE bulletProof SET quantity = @quantity WHERE identifier = @identifier', {
+            MySQL.update('UPDATE bulletproof SET quantity = @quantity WHERE identifier = @identifier', {
                 ['@identifier'] = identifier,
                 ['@quantity'] = armour
             })
         else
-            MySQL.insert('INSERT INTO bulletProof (identifier, quantity) VALUES (@identifier, @quantity)', {
+            MySQL.insert('INSERT INTO bulletproof (identifier, quantity) VALUES (@identifier, @quantity)', {
                 ['@identifier'] = identifier,
                 ['@quantity'] = armour
             })
@@ -35,7 +35,7 @@ AddEventHandler('playerSpawned', function()
     local identifier = GetPlayerIdentifier(source, 0)
     identifier = identifier:gsub("license:", "")
 
-    MySQL.query('SELECT quantity FROM bulletProof WHERE identifier = @identifier', {
+    MySQL.query('SELECT quantity FROM bulletproof WHERE identifier = @identifier', {
         ['@identifier'] = identifier
     }, function(result)
         if #result > 0 then
