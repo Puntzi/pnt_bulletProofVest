@@ -1,5 +1,6 @@
 local ox_inventory = exports.ox_inventory
 local armourType
+local removingVest = false
 
 RegisterCommand(Config.CommandRemoveVest, function()
     local playerPed = cache.ped
@@ -8,6 +9,12 @@ RegisterCommand(Config.CommandRemoveVest, function()
         SetPedComponentVariation(playerPed, 9, 0, 0, 0)
         return lib.notify({type = 'error', description = Strings['no_armour']})
     end
+
+    if removingVest then 
+        return lib.notify({type = 'error', description = Strings['already_removing']})
+    end
+
+    removingVest = true
 
     if lib.progressBar({
         duration = 3500,
@@ -18,10 +25,11 @@ RegisterCommand(Config.CommandRemoveVest, function()
             dict = 'clothingshirt',
             clip = 'try_shirt_positive_d'
         },
-    }) then 
+    }) then
         SetPedArmour(playerPed, 0)
         SetPedComponentVariation(playerPed, 9, 0, 0, 0)
         TriggerServerEvent('pnt_bulletProofVest:removeIt', armour, armourType)
+        removingVest = false
     end
 end)
 
